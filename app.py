@@ -448,6 +448,7 @@ if verify_clicked:
 
         label      = record["label"]
         raw_score  = record["raw_score"]
+        confidence = record["confidence"]
         timestamp  = record.get("timestamp")
         label_color = "green" if label == "REAL" else "red"
 
@@ -461,8 +462,8 @@ if verify_clicked:
                     <div class="tc-card-title">◈ AI Credibility Result</div>
                     {_stat("VERDICT", label, label_color)}
                     {_stat("RAW SCORE", f"{raw_score:.6f}", label_color)}
-                    {_stat("CONFIDENCE", f"{raw_score*100:.1f}%")}
-                    {_confidence_bar(raw_score, label)}
+                    {_stat("CONFIDENCE", f"{confidence*100:.1f}%")}
+                    {_confidence_bar(confidence, label)}
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -519,7 +520,7 @@ if verify_clicked:
                     {_stat("VERDICT", label, label_color)}
                     {_stat("RAW SCORE", f"{raw_score:.6f}", label_color)}
                     {_stat("CONFIDENCE", f"{confidence*100:.1f}%")}
-                    {_confidence_bar(raw_score, label)}
+                    {_confidence_bar(confidence, label)}
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -559,6 +560,15 @@ if verify_clicked:
             except Exception as e:
                 with col_chain:
                     st.error(f"**Transaction failed:** `{e}`")
+
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    col_refresh, _ = st.columns([1, 3])
+    with col_refresh:
+        if st.button("⟳ Check Another News"):
+            if hasattr(st, "rerun"):
+                st.rerun()
+            else:
+                st.experimental_rerun()
 
 # ---------------------------------------------------------------------------
 # Footer
